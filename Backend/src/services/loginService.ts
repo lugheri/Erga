@@ -10,7 +10,7 @@ import { UserAccessType } from '../controllers/Dtos/usersAccess.dto';
 class loginService{
   async checkUser(accessUser: UserAccessType){
     const userdata = await User.findOne({
-      attributes: ['id','name','password','credential'],
+      attributes: ['id','name','password','type_user'],
       where: {username: accessUser.username, status:1}
     })
     if(!userdata){
@@ -25,7 +25,7 @@ class loginService{
   async userAuthenticate(action:string,userdata?:UserInstance,authHeader?:string){
     if(action=='login'){
       if(userdata){
-        const token = jwt.sign({userId:userdata.id,userName:userdata.username,credential:userdata.credential},process.env.APP_SECRET as string,{expiresIn:'12h'})
+        const token = jwt.sign({userId:userdata.id,userName:userdata.username,type_user:userdata.type_user},process.env.APP_SECRET as string,{expiresIn:'12h'})
         //Check last action login user
         const lastAction = await Logins.findOne({attributes: ['action'],
                                                 where: {id:userdata.id},

@@ -12,7 +12,7 @@ export type UserAccessType = z.infer<typeof UserAccessDTO>;
 export const UserDataDTO = z.object({
   name:z.string(),
   username:z.string(),
-  credential: z.number(),
+  type_user: z.string(),
   password:z.string().transform(v=>md5(v)),
   reset: z.optional(z.number()).default(1),
   logged: z.optional(z.number()).default(0),
@@ -20,11 +20,16 @@ export const UserDataDTO = z.object({
 })
 export type UserDataType = z.infer<typeof UserDataDTO>;
 
-//CREDENTIALS
-export const CredentialAccessDTO = z.object({
-  name:z.string(),
-  administrator: z.number(),
-  description: z.optional(z.string()).default('Sem Descrição'),
+export const UserDataPartialDTO = UserDataDTO.partial();
+export type UserDataPartialType = z.infer<typeof UserDataPartialDTO>;
+
+
+export const PaginationUserDTO = z.object({
   status: z.optional(z.literal(1).or(z.literal(0))).default(1),
-})
-export type CredentialAccessType = z.infer<typeof CredentialAccessDTO>;
+  page: z.optional(z.number()).default(1),
+  order: z.optional(z.enum(['ASC','DESC'])).default('ASC'),
+  orderedBy: z.optional(z.string()).default('id'),
+})  
+export type PaginationUserType = z.infer<typeof PaginationUserDTO>;
+
+
